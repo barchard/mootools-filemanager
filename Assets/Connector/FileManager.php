@@ -2142,16 +2142,19 @@ class FileManager
 
 				$hdrs = array();
 				// see also: http://www.boutell.com/newfaq/creating/forcedownload.html
-				switch ($mime)
+				if (isset($_SERVER['HTTP_USER_AGENT']) && (strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'msie') === false))
 				{
-				// add here more mime types for different file types and special handling by the client on download
-				case 'application/pdf':
-					$hdrs[] = 'Content-Type: ' . $mime;
-					break;
+					switch ($mime)
+					{
+						// add here more mime types for different file types and special handling by the client on download
+						case 'application/pdf':
+							$hdrs[] = 'Content-Type: ' . $mime;
+							break;
 
-				default:
-					$hdrs[] = 'Content-Type: application/octet-stream';
-					break;
+						default:
+							$hdrs[] = 'Content-Type: application/octet-stream';
+							break;
+					}
 				}
 				
 				$hdrs[] = 'Content-Disposition: attachment; filename="' . $fi['basename'] . '"'; // use 'attachment' to force a download
